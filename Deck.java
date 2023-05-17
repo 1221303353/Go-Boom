@@ -2,21 +2,33 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Deck {
+    //Variable declaration and initialisation
     private ArrayList<String> card;
-
+    private String[] suits = {"d", "c", "h", "s"};
+    private String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+    
     // To generate a deck of 52 cards
     public Deck() {
         this.card = new ArrayList<>();
 
-        String[] suits = {"d", "c", "h", "s"};
-        String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-
         for (String suit: suits) {
             for (String rank: ranks) {
-                //String cardid = suit + rank;
                 this.card.add(suit + rank);           
             }
         }
+    }
+
+    // To get a card suit
+    public String getSuit(String i) {
+        //toLowerCase() to ensure the suit remains lowercase despite the input
+        i = i.substring(0, 1).toLowerCase(); 
+        return i;
+    }
+
+    //To get a card rank
+    public String getRank(String i) {
+        i = i.substring(1).toUpperCase();
+        return i;
     }
 
     //To shuffle the deck
@@ -25,22 +37,19 @@ public class Deck {
         //https://stackoverflow.com/questions/39557701/shuffle-a-deck-of-cards-in-java
     }
 
+    //To draw a card from the deck
     public String drawCard() {
-        return this.card.remove(this.card.size() - 1);
+        return this.card.remove(0);
     }
 
-    public void cardInDeck() {
-        System.out.printf("%-7s: [", "Deck");
-        for (int i=0; i<this.card.size(); i++)
-        {
-            System.out.print(this.card.get(i));
-            if (i<this.card.size()-1) {
-                System.out.print(", ");
-            }
-        }
-        System.out.print("] \n");
+    //To return the type of card in the deck
+    public String cardInDeck(int i) {
+        return this.card.get(i);
+    }
 
-        System.out.println(this.card.size());
+    //To return the size of the deck
+    public int cardInDeckSize() {
+        return this.card.size();
     }
 
     public static void main(String[] args)
