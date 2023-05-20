@@ -6,12 +6,18 @@ public class Game {
     private Player player;
     private ArrayList<String> center;
     private int currentPlayer;
+    private ArrayList<Integer> playerList;
 
     //Variable initialisation
     public Game() {
         this.deck = new Deck();
         this.player = new Player();
         this.center = new ArrayList<>();
+        this.playerList = new ArrayList<>();
+
+        // for (int i=1; i<=player.getNoOfPlayer(); i++) {
+        //     this.playerList.add("player"+i);
+        // }
     }
     
     //To display the game board
@@ -62,9 +68,6 @@ public class Game {
             }
         }
         System.out.print("\n");
-
-        //To display the current player turn
-        System.out.printf("%-7s: Player%d \n", "Turn", currentPlayer+1);
     }
 
     //To check wheather the card played is playable
@@ -121,128 +124,202 @@ public class Game {
         }
     }
 
+    public int getWinPlayer() {
+        String leadSuit = deck.getSuit(this.center.get(0));
+        String cardSuit;
+        int[] cardRank = new int[4];
+
+        if (this.center.size() == 5) {
+            this.center.remove(0); 
+        }
+        
+        for (int i=0; i<this.center.size(); i++) {
+            cardRank[i] = deck.getRankValue(this.center.get(i));
+        }
+
+        int maxNumber = cardRank[0];
+        int maxIndex = 0;
+
+        for (int i=0; i<this.center.size(); i++) {
+            cardSuit = deck.getSuit(this.center.get(i));
+            
+            if (!cardSuit.equals(leadSuit)) {
+                continue;
+            }
+            
+            if (cardRank[i] > maxNumber) {
+                maxNumber = cardRank[i];
+                maxIndex = i;
+            }
+        }
+        
+        return maxIndex;
+    }
+
     public void turn() {
         boolean endTurn = false;
         String cmd;
 
-        for (int i=0; i<player.getNoOfPlayer(); i++) {
-            while (!endTurn) {
-                displayBoard();
-    
-                cmd = userInput();           
-                
-                //To exit the game
-                if (cmd.equals("x")) {
-                    System.out.println("Exiting the game...");
-                    endTurn = true;
-                    break;
+        while (!endTurn) {
+            displayBoard();
+            
+            //To display the current player turn
+            System.out.printf("%-7s: Player%d \n", "Turn", currentPlayer+1);
+            cmd = userInput();           
+
+            //To exit the game
+            if (cmd.equals("x")) {
+                System.out.println("Exiting the game...");
+                endTurn = true;
+                //break;
+            }
+            //To draw a card 
+            else if (cmd.equals("d")) {
+                int count=0;
+                boolean foundPlayableCard = false;
+                boolean handPlayable = false;
+
+                if (this.center.size() == 0) {
+                    System.out.println("You must play a card to lead the trick.");
+                    endTurn = false;
+                    continue;
                 }
-                //To draw a card 
-                else if (cmd.equals("d")) {
-                    int count=0;
-                    boolean foundPlayableCard = false;
-        
-                    //To check if the deck has a playable card
-                    for (int j=0; j<deck.cardInDeckSize(); j++) {
-                        //If there is a playable card
-                        if (isPlayableCard(deck.cardInDeck(j))) {
-                            foundPlayableCard = true;
-                            count = j+1;
-                            break;
-                        }
-                        //If there is no playable card
-                        else {
-                            foundPlayableCard = false;
-                        }
-                    }
-                    
-                    //If there is a playable card in the deck
-                    if (foundPlayableCard) {
-                        //Drew a card until the playable card is found
-                        System.out.printf("You drew the card: ");
-                        for (int j=0; j<count; j++) {
-                            String drawnCard = deck.drawCard();
-                            player.setHand(currentPlayer, drawnCard);
-                            System.out.printf("%s", drawnCard);
-                            if (i<count-1) {
-                                System.out.print(", ");
-                            }
-                        }
-                        System.out.println();
-                        endTurn = false;
-                    }
-                    //If there is no playable card in the deck
-                    else {
-                        //Skip the player turn
-                        System.out.println("No playable card found. Your turn is skipped.");
-                        endTurn = true;
+
+                for (int i=0; i<player.getHandRowSize(currentPlayer); i++) {
+                    if (isPlayableCard(player.getHand(currentPlayer, i))) {
+                        handPlayable = true;
                         break;
                     }
-                } 
-                //To play a card         
-                else {
-                    //If the card is playable
-                    if (isPlayableCard(cmd)) {
-                        //To ensure the card suit is lowercase and the card rank is uppercase 
-                        String cardSuit = deck.getSuit(cmd);
-                        String cardRank = deck.getRank(cmd);
-                        cmd = cardSuit + cardRank;
-        
-                        //Play the playable card to the center
-                        this.center.add(cmd);
-                        player.dealCard(currentPlayer, cmd);
-                        
-                        //End the current player turn
-                        endTurn = true;  
-                        break; 
-                    } 
-                    // If the card is not playable
-                    else {
-                        System.out.println("Invalid input. Please try again.");
-                        endTurn = false;
+                }
+
+                //To check if the deck has a playable card
+                for (int j=0; j<deck.cardInDeckSize(); j++) {
+                    //If there is a playable card
+                    if (isPlayableCard(deck.cardInDeck(j))) {
+                        foundPlayableCard = true;
+                        count = j+1;
+                        break;
                     }
-                }   
+                }
+                
+                //If there is a playable card in the deck
+                if (foundPlayableCard && !handPlayable) {
+                    //Drew a card until the playable card is found
+                    System.out.printf("You drew the card: ");
+                    for (int j=0; j<count; j++) {
+                        String drawnCard = deck.drawCard();
+                        player.setHand(currentPlayer, drawnCard);
+                        System.out.printf("%s", drawnCard);
+                        if (j<count-1) {
+                            System.out.print(", ");
+                        }
+                    }
+                    System.out.println();
+                    endTurn = false;
+                }
+                //If there is no playable card in the deck
+                else if (!foundPlayableCard) {
+                    //Skip the player turn
+                    System.out.println("No playable card found in the deck. Your turn is skipped.");
+                    endTurn = true;
+                    //break;
+                }
+                else if (handPlayable) {
+                    System.out.println("Your hand has a playable card. \nYou cannot draw a card from the deck.");
+                    endTurn = false;
+                }
+            } 
+            //To play a card         
+            else {
+                //To ensure the card suit is lowercase and the card rank is uppercase 
+                String cardSuit = deck.getSuit(cmd);
+                String cardRank = deck.getRank(cmd);
+                cmd = cardSuit + cardRank;
+
+                Boolean validHand = false;
+                for (int j=0; j<player.getHandRowSize(currentPlayer); j++) {
+                    if (cmd.equals(player.getHand(currentPlayer, j))) {
+                        validHand = true;
+                    }
+                }
+
+                if (validHand) {
+                    //Play the playable card to the center
+                    this.center.add(cmd);
+                    this.playerList.add(currentPlayer+1);
+                    player.dealCard(currentPlayer, cmd);
+                    
+                    //End the current player turn
+                    endTurn = true;  
+                    //break; 
+                }
+                // If the card is not playable
+                else {
+                    System.out.println("Invalid input. Please try again.");
+                    endTurn = false;
+                }
             }
-            getNextPlayer();
         }
+        getNextPlayer();
     }
 
     public void trick() {
-        player.upTrickCount();
-        deck.shuffle();
-        
-        if (player.getTrickCount() == 1) {
-            this.center.add(0, deck.drawCard());
-            setFirstPlayer();
-        } 
-        
-        for (int i=0; i<player.getNoOfPlayer(); i++) {
-            for (int j=0; j<player.getNoOfCard(); j++) {
-                player.setHand(i, deck.drawCard());
-            }
-        }
-        
         boolean endTrick = false;
+        int winPlayer = 0;
+        deck.shuffle();
+        player.setTrickCount(0);
+
         while (!endTrick) {
-            turn();
-        } 
+            this.center.clear();
+            this.playerList.clear();
+            player.upTrickCount();
+
+            if (player.getTrickCount() == 1) {
+                this.center.add(0, deck.drawCard());
+                setFirstPlayer();
+                for (int i=0; i<player.getNoOfPlayer(); i++) {
+                    for (int j=0; j<player.getNoOfCard(); j++) {
+                        player.setHand(i, deck.drawCard());
+                    }
+                }
+            }
+            
+            for (int i=0; i<player.getNoOfPlayer(); i++) {
+                turn();
+                
+                for (int j=0; j<player.getNoOfPlayer(); j++) {
+                    if (player.getHandRowSize(j) == 0) {
+                        System.out.println("\n\nGO BOOM!!");
+                        System.out.printf("Player%d Wins The Game \n", j+1);
+                        endTrick = true;
+                        break;
+                    }
+                }
+
+                if (endTrick) {
+                    break;
+                }
+            }
+            
+            if (endTrick) {
+                break;
+            }
+
+            displayBoard();
+            winPlayer = getWinPlayer();
+            currentPlayer = this.playerList.get(winPlayer) - 1;
+            System.out.printf("\n\n*** Player" + this.playerList.get(winPlayer) + " wins Trick #%d *** \n", player.getTrickCount());
+        }
     }
-
-
-
-
-
 
     public static void main(String[] args) {
         Game game = new Game();
         Boolean endGame = false;
-
-        //game.start();
         
         while (!endGame) {
             game.trick();
-        }
 
-        game.turn();
+            //Score
+        }
     }
 }

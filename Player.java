@@ -25,6 +25,10 @@ public class Player {
         return this.trickCount;
     }
 
+    public void setTrickCount(int i) {
+        this.trickCount = i;
+    }
+
     //To increase trick number
     public void upTrickCount() {
         this.trickCount++; 
@@ -50,6 +54,10 @@ public class Player {
         return this.score[i];
     }
 
+    public void setScore(int i, int j) {
+        this.score[i] += j; 
+    }
+
     //To add a card on the player
     public void setHand(int i, String card) {
         this.hand.get(i).add(card);
@@ -59,6 +67,10 @@ public class Player {
     public String getHand(int i, int j) {
         return this.hand.get(i).get(j);
     } 
+
+    public int getHandRowSize(int i) {
+        return this.hand.get(i).size();
+    }
     
     //To remove a card from the player
     public void dealCard(int i, String cmd) {
