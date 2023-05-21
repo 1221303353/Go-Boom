@@ -139,7 +139,7 @@ public class Game {
             cardRank[i] = deck.getRankValue(this.center.get(i));
         }
 
-        int maxNumber = cardRank[0];
+        int maxNumber = 0;
         int maxIndex = 0;
 
         //To compare the card rank value and find the index in an array for the highest rank value
@@ -288,6 +288,7 @@ public class Game {
         getNextPlayer();
     }
 
+    //The flow of the trick
     public void trick() {
         boolean endTrick = false;
         int winPlayer = 0;
