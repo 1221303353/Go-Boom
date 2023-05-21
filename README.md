@@ -3,7 +3,7 @@
 ## A. Member Contributions
 
 No | ID         | Name                                | Task descriptions | Contribution %
--- | ---------- | ----                                | ----------------- | --------------
+-- | ---------- | -----                               | ----------------- | --------------
 1  | 1221303353 | MUHAMMAD AMIR FARID BIN AHSAN NUDIN | All               | 100%
 
 

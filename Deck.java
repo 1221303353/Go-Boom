@@ -3,8 +3,8 @@ import java.util.Collections;
 
 public class Deck {
     //Variable declaration and initialisation
-    private ArrayList<String> card;
-    private ArrayList<String> wholeDeck;
+    private ArrayList<String> card;                 //cards in the deck
+    private ArrayList<String> wholeDeck;            //cards in the deck (without any removal or insertion)
     private String[] suits = {"d", "c", "h", "s"};
     private String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
     
@@ -21,22 +21,30 @@ public class Deck {
         }
     }
 
+    //To shuffle the deck
+    public void shuffle() {
+        Collections.shuffle(this.card);
+        //https://stackoverflow.com/questions/39557701/shuffle-a-deck-of-cards-in-java
+    }
+    
     // To get a card suit
-    public String getSuit(String i) {
+    public String getSuit(String suit) {
         //toLowerCase() to ensure the suit remains lowercase despite the input
-        i = i.substring(0, 1).toLowerCase(); 
-        return i;
+        suit = suit.substring(0, 1).toLowerCase(); 
+        return suit;
     }
 
     //To get a card rank
-    public String getRank(String i) {
-        i = i.substring(1).toUpperCase();
-        return i;
+    public String getRank(String rank) {
+        //toUpperCase() to ensure the rank remains uppercase despite the input
+        rank = rank.substring(1).toUpperCase();
+        return rank;
     }
 
-    public int getRankValue(String i) {
-        String j = getRank(i);
-        switch (j) {
+    //To get the value of rank
+    public int getRankValue(String rank) {
+        rank = getRank(rank);
+        switch (rank) {
             case "A":
                 return 14;
             case "K":
@@ -68,12 +76,6 @@ public class Deck {
         }
     }
     
-    //To shuffle the deck
-    public void shuffle() {
-        Collections.shuffle(this.card);
-        //https://stackoverflow.com/questions/39557701/shuffle-a-deck-of-cards-in-java
-    }
-
     //To draw a card from the deck
     public String drawCard() {
         return this.card.remove(0);
@@ -89,21 +91,14 @@ public class Deck {
         return this.card.size();
     }
 
+    //To return the type of card in the deck (without adjustment)
     public String cardWholeDeck(int i) {
         return this.wholeDeck.get(i);
     }
 
+    //To return the size of the deck (without adjustment)
     public int cardWholeDeckSize() {
         return this.wholeDeck.size();
     }
 
-
-    public static void main(String[] args)
-    {
-        //Deck deck = new Deck();
-        // deck.printTest();
-        // deck.shuffle();
-        // deck.printTest();
-
-    }
 }
