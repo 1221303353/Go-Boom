@@ -26,9 +26,9 @@ public class Game2 {
 
         //Display Player Hand
         for (int i=0; i<player.getNoOfPlayer(); i++) {
-            System.out.printf("%-7s: " + player.test(i) + "\n", player.getPlayerName(i), i+1);
+            System.out.printf("%-7s: " + player.getHand(i) + "\n", player.getPlayerName(i), i+1);
         }
-
+        
         //Display Center
         System.out.printf("%-7s: " + this.center + "\n", "Center");
         
@@ -138,6 +138,7 @@ public class Game2 {
         return maxIndex;
     }
 
+    //To calculate the player score based on the cards at hand
     public int cardScore(int j) {
         int score=0;
 
@@ -186,10 +187,6 @@ public class Game2 {
         return score;
     }
 
-    public boolean setBreak() {
-        return false;
-    }
-
     //The flow of the player turn
     public boolean turn() {
         boolean endTurn = false;
@@ -203,8 +200,34 @@ public class Game2 {
             System.out.printf("%-7s: %s \n", "Turn", player.getPlayerName(this.currentPlayerIndex));
             cmd = userInput(scanner);           
 
+            //To save the game
+            if (cmd.equals("save")) {
+                GameSaveManager.saveGame("save.txt", deck.cardInDeck(), player.getHand(), player.getPlayerScore(), this.currentPlayerIndex, 
+                this.trickCount, this.center, this.playerInputList);
+                endTurn = false;
+            }
+            //To load a saved game
+            else if (cmd.equals("load")) {
+                GameData savedData = GameSaveManager.loadGame("save.txt");
+                if (savedData != null) {
+                    deck.setCardInDeck(savedData.getCard());
+                    player.setHand(savedData.getHand());
+                    player.setPlayerScore(savedData.getPlayerScore());
+                    this.currentPlayerIndex = savedData.getCurrentPlayerIndex();
+                    this.trickCount = savedData.getTrickCount();
+                    this.center = savedData.getCenter();
+                    this.playerInputList = savedData.getPlayerInputList();
+                }
+                else {
+                    System.out.println("There are no games saved in this program.");
+                }
+                endTurn = false;
+            }
+            else if (cmd.equals("s")) {
+                play();
+            }
             //To exit the game
-            if (cmd.equals("x")) {
+            else if (cmd.equals("x")) {
                 System.out.println("Exiting the game...");
                 endTurn = true;
                 return true;
@@ -317,36 +340,25 @@ public class Game2 {
             }
         }
 
-        //Check if the player has no cards left in their hand,
-        //If yes, that player won the game
-        if (player.getHandRowSize(this.currentPlayerIndex) == 0) {
-            System.out.println("\n\nGO BOOM!!");
-            System.out.printf("%s Wins The Game \n", player.getPlayerName(currentPlayerIndex));
-            return true;
-        }
-        else {
-            //Get the next player turn
-            getNextPlayer();
-            return false;
-        }
+        return false;
     }
 
     public void play() {
         boolean endPlay = false;
-        boolean endTrick = false;
 
         while (!endPlay) {        
             //Shuffle the deck and set the trick count to 0 for every game round
+            boolean endTrick = false;
             deck.shuffle();
             this.trickCount = 0;
             int winPlayer = 0;
-
+            
             while (!endTrick) {
                 //Clear the center, playerList and up the trick count for every trick
                 this.center.clear();
                 this.playerInputList.clear();
                 this.trickCount += 1;
-
+                
                 //If it's the first trick
                 if (this.trickCount == 1) {
                     //Draw a card from the deck to the center as the lead card
@@ -362,12 +374,31 @@ public class Game2 {
                 }
                 
                 //4 player take turns in playing
-                for (int i=0; i<player.getNoOfPlayer(); i++) {
+                //for (int i=0; i<player.getNoOfPlayer(); i++) {
+                while (playerInputList.size() < 4) {
                     endTrick = turn();
+
                     if (endTrick) {
                         endPlay = true;
                         break;
                     }
+
+                    //Check if the player has no cards left in their hand,
+                    //If yes, that player won the game
+                    if (player.getHandRowSize(this.currentPlayerIndex) == 0) {
+                        System.out.println("\n\nGO BOOM!!");
+                        System.out.printf("%s Wins The Game \n", player.getPlayerName(this.currentPlayerIndex));
+                        
+                        for (int j=0; j<player.getNoOfPlayer(); j++) {
+                            player.setScore(player.getPlayerName(j), cardScore(j));
+                        }
+                        displayBoard();
+                        endTrick = true;
+                        break;
+                    }
+
+                    //Get the next player turn
+                    getNextPlayer();
                 }
 
                 if (this.playerInputList.size() == 4) {
@@ -375,18 +406,20 @@ public class Game2 {
                     displayBoard();
                     winPlayer = getWinPlayer();
                     currentPlayerIndex = this.playerInputList.get(winPlayer);
-                    System.out.printf("\n\n*** Player" + this.playerInputList.get(winPlayer) + " wins Trick #%d *** \n", this.trickCount);
+                    System.out.printf("\n\n*** %s wins Trick #%d *** \n", player.getPlayerName(currentPlayerIndex), this.trickCount);
                 }
             }
         }
     }
-
+ 
     public static void main(String[] args) {
+        //Variable declaration and initialisation
         Game2 game = new Game2();
         Boolean endProgram = false;
         Scanner scanner = new Scanner(System.in);
         String cmd;
 
+        //Loop for data validation
         while (!endProgram) {
             System.out.println("Welcome to Go Boom Card Game \n");
             System.out.println("s - to start the game");
@@ -407,5 +440,4 @@ public class Game2 {
             }
         }
     }
-
 }

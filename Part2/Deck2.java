@@ -81,11 +81,12 @@ public class Deck2 {
         return this.card.remove(0);
     }
 
-    //To return the type of card in the deck
+    //To return the cards in the deck
     public ArrayList<String> cardInDeck() {
         return this.card;
     }
 
+    //To return a card in the deck
     public String cardInDeck(int i) {
         return this.card.get(i);
     }
@@ -95,7 +96,7 @@ public class Deck2 {
         return this.card.size();
     }
 
-    //To return the type of card in the deck (without adjustment)
+    //To return a card in the deck (without adjustment)
     public String cardWholeDeck(int i) {
         return this.wholeDeck.get(i);
     }
@@ -105,4 +106,8 @@ public class Deck2 {
         return this.wholeDeck.size();
     }
 
+    //To set the card arrary (use in save/load feature)
+    public void setCardInDeck(ArrayList<String> card) {
+        this.card = card;
+    }
 }

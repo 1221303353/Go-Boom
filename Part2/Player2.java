@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class Player2 {
-    //Variable declaratiom and initialisation
+    //Variable declaration and initialisation
     private int noOfCard = 3;
 
     private String[] playerName = {"Player1", "Player2", "Player3", "Player4"};
@@ -23,6 +23,7 @@ public class Player2 {
         }
     }
 
+    //To get the player name
     public String getPlayerName(int i) {
         return this.playerName[i];
     }
@@ -42,36 +43,54 @@ public class Player2 {
         this.hand.get(i).add(card);
     }
 
-    //To return the card on the player
+    //To return a card on a player
     public String getHand(int i, int j) {
         return this.hand.get(i).get(j);
     } 
 
-    public ArrayList<String> test(int i) {
+    //To return the cards on a player
+    public ArrayList<String> getHand(int i) {
         return this.hand.get(i);
     }
 
+    //To return the hand 2D ArrayList
+    public ArrayList<ArrayList<String>> getHand() {
+        return this.hand;
+    }
+    
     //To return number of cards on the player
     public int getHandRowSize(int i) {
         return this.hand.get(i).size();
     }
-    
+
     //To remove a card from the player
     public void playCard(int i, String cmd) {
         this.hand.get(i).remove(cmd);
     }
-    
 
-    //Part 2
-    //To return the player score
+    //To return a player score
     public int getPlayerScore(String player) {
         return this.playerScore.get(player);
     }
 
-    //To increase the player score
+    //To return the playerScore LinkedHaskMap
+    public LinkedHashMap<String, Integer> getPlayerScore() {
+        return this.playerScore;
+    }
+    
+    //To increase a player score
     public void setScore(String player, int i) {
         int score = this.playerScore.get(player) + i;
         this.playerScore.put(player, score);
     }
 
+    //To set the hand 2D ArrayList (use in save/load feature)
+    public void setHand(ArrayList<ArrayList<String>> hand) {
+        this.hand = hand;
+    }
+
+    //To set the playerScore LinkedHashMap (use in save/load feature)
+    public void setPlayerScore(LinkedHashMap<String, Integer> playerScore) {
+        this.playerScore = playerScore;
+    }
 }
