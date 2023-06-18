@@ -3,7 +3,7 @@ import java.util.LinkedHashMap;
 
 public class Player2 {
     //Variable declaration and initialisation
-    private int noOfCard = 3;
+    private int noOfCard = 7;
 
     private String[] playerName = {"Player1", "Player2", "Player3", "Player4"};
     private ArrayList<ArrayList<String>> hand;
@@ -70,7 +70,7 @@ public class Player2 {
         }
     }
 
-    //To remove a card from the player
+    //To play a card from the player
     public void playCard(int i, String cmd) {
         this.hand.get(i).remove(cmd);
     }

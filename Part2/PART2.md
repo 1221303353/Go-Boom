@@ -49,5 +49,9 @@ No | Feature                                                                    
 
 ## D. Link to Part 2 GitHub Repo
 
-https://link_to_your_GitHub_repo
+https://github.com/1221303353/Go-Boom
+
+## E. Link to Part 2 Video Presentation
+
+https://youtu.be/AD4CVKoNCVU 
 

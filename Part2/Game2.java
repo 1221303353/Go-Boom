@@ -1,5 +1,4 @@
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.control.Alert;
@@ -360,9 +359,8 @@ public class Game2 extends Application{
 
     public boolean play() {
         boolean endPlay = false;
-        deck.createNewDeck();
         player.clearPlayerScore();
-        player.clearHand();
+        
 
         while (!endPlay) {        
             //Shuffle the deck and set the trick count to 0 for every game round
@@ -402,6 +400,8 @@ public class Game2 extends Application{
                         return true;
                     }
                     else if (caseValue==2) {
+                        deck.createNewDeck();
+                        player.clearHand();
                         endTrick = true;
                         endPlay = true;
                         return false;
@@ -416,6 +416,8 @@ public class Game2 extends Application{
                         for (int j=0; j<player.getNoOfPlayer(); j++) {
                             player.setScore(player.getPlayerName(j), cardScore(j));
                         }
+                        deck.createNewDeck();
+                        player.clearHand();
                         endTrick = true;
                         break;
                     }

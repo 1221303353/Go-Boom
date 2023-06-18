@@ -111,6 +111,7 @@ public class Deck2 {
         this.card = card;
     }
 
+    //To create a new deck when starting a new game
     public void createNewDeck() {
         this.card.clear();
         this.wholeDeck.clear();
