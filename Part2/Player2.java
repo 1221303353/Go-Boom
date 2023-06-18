@@ -63,6 +63,13 @@ public class Player2 {
         return this.hand.get(i).size();
     }
 
+    //To clear the hand 2D ArrayList
+    public void clearHand() {
+        for (ArrayList<String> row : this.hand) {
+            row.clear();
+        }
+    }
+
     //To remove a card from the player
     public void playCard(int i, String cmd) {
         this.hand.get(i).remove(cmd);
@@ -78,6 +85,13 @@ public class Player2 {
         return this.playerScore;
     }
     
+    //To reset the playerScore LinkedHaskMap
+    public void clearPlayerScore() {
+        for (int i=0; i<this.playerName.length; i++) {
+            this.playerScore.put(getPlayerName(i), 0);
+        }
+    }
+
     //To increase a player score
     public void setScore(String player, int i) {
         int score = this.playerScore.get(player) + i;

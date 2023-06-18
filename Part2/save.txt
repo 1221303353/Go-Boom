@@ -1,7 +1,7 @@
-card:h8,h7,c7,c5,c10,cA,d10,s7,s8,s3,dJ,c6,s5,s4,dA,c4,sQ,c2,hA,c9,h9,s10,dK,h3,d8,d4,dQ,c3,hQ,d6,d2,c8,cJ,d7,cK,hK,sJ,s2,d9,
-hand:[h10,h2,d3,],[sK,h4,d5,],[sA,h5,s9,],[cQ,h6,hJ,],
-playerScore:Player1=0,Player2=0,Player3=0,Player4=0,
-currentPlayerIndex:1
+card:hA,cA,c8,s4,h10,d10,sK,c5,d5,h3,h2,c6,
+hand:[s5,s8,d6,d9,c4,s10,dA,s6,c9,hK,d4,c3,],[s3,cJ,c10,],[h6,dQ,sQ,hJ,],[sJ,sA,s9,s2,c2,d3,h5,],
+playerScore:Player1=58,Player2=0,Player3=6,Player4=22,
+currentPlayerIndex:0
 trickCount:1
-center:s6,
+center:h9,
 playerInputList:

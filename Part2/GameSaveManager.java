@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 public class GameSaveManager {
 
     //To write data in a txt file
-    public static void saveGame(String filename, ArrayList<String> card, ArrayList<ArrayList<String>> hand, LinkedHashMap<String, Integer> playerScore,
+    public static void save(String filename, ArrayList<String> card, ArrayList<ArrayList<String>> hand, LinkedHashMap<String, Integer> playerScore,
      int currentPlayerIndex, int trickCount, ArrayList<String> center, ArrayList<Integer> playerInputList) {
         
         try {
@@ -64,7 +64,7 @@ public class GameSaveManager {
     }
 
     //To access the data in a txt file
-    public static GameData loadGame(String filename) {
+    public static GameData load(String filename) {
         
         try {
             //To load the txt file at the location

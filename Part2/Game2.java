@@ -1,6 +1,16 @@
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.stage.*;
 import java.util.*;
 
-public class Game2 {
+public class Game2 extends Application{
     //Variable declaration
     private Deck2 deck;
     private Player2 player;
@@ -188,7 +198,7 @@ public class Game2 {
     }
 
     //The flow of the player turn
-    public boolean turn() {
+    public int turn() {
         boolean endTurn = false;
         String cmd;
         Scanner scanner = new Scanner(System.in);
@@ -202,13 +212,15 @@ public class Game2 {
 
             //To save the game
             if (cmd.equals("save")) {
-                GameSaveManager.saveGame("save.txt", deck.cardInDeck(), player.getHand(), player.getPlayerScore(), this.currentPlayerIndex, 
-                this.trickCount, this.center, this.playerInputList);
+                GameSaveManager.save("save.txt", deck.cardInDeck(), player.getHand(), player.getPlayerScore(), this.currentPlayerIndex, 
+                    this.trickCount, this.center, this.playerInputList);
+                
                 endTurn = false;
             }
             //To load a saved game
             else if (cmd.equals("load")) {
-                GameData savedData = GameSaveManager.loadGame("save.txt");
+                GameData savedData = GameSaveManager.load("save.txt");
+        
                 if (savedData != null) {
                     deck.setCardInDeck(savedData.getCard());
                     player.setHand(savedData.getHand());
@@ -223,14 +235,17 @@ public class Game2 {
                 }
                 endTurn = false;
             }
+            //To start a new game
             else if (cmd.equals("s")) {
-                play();
+                System.out.println("Starting a new game...");
+                endTurn = true;
+                return 2;
             }
             //To exit the game
             else if (cmd.equals("x")) {
                 System.out.println("Exiting the game...");
                 endTurn = true;
-                return true;
+                return 1;
             }
             //To draw a card 
             else if (cmd.equals("d")) {
@@ -286,7 +301,7 @@ public class Game2 {
                 }
                 //If there is a playable card in the hand
                 else if (handPlayable) {
-                    //Skip the player turn
+                    //Repeat the player turn
                     System.out.println("Your hand has a playable card. \nYou cannot draw a card from the deck.");
                     endTurn = false;
                 }
@@ -340,15 +355,19 @@ public class Game2 {
             }
         }
 
-        return false;
+        return 0;
     }
 
-    public void play() {
+    public boolean play() {
         boolean endPlay = false;
+        deck.createNewDeck();
+        player.clearPlayerScore();
+        player.clearHand();
 
         while (!endPlay) {        
             //Shuffle the deck and set the trick count to 0 for every game round
             boolean endTrick = false;
+            
             deck.shuffle();
             this.trickCount = 0;
             int winPlayer = 0;
@@ -357,7 +376,7 @@ public class Game2 {
                 //Clear the center, playerList and up the trick count for every trick
                 this.center.clear();
                 this.playerInputList.clear();
-                this.trickCount += 1;
+                this.trickCount++;
                 
                 //If it's the first trick
                 if (this.trickCount == 1) {
@@ -374,13 +393,18 @@ public class Game2 {
                 }
                 
                 //4 player take turns in playing
-                //for (int i=0; i<player.getNoOfPlayer(); i++) {
                 while (playerInputList.size() < 4) {
-                    endTrick = turn();
+                    int caseValue = turn();
 
-                    if (endTrick) {
+                    if (caseValue==1) {
                         endPlay = true;
-                        break;
+                        endTrick = true;
+                        return true;
+                    }
+                    else if (caseValue==2) {
+                        endTrick = true;
+                        endPlay = true;
+                        return false;
                     }
 
                     //Check if the player has no cards left in their hand,
@@ -392,7 +416,6 @@ public class Game2 {
                         for (int j=0; j<player.getNoOfPlayer(); j++) {
                             player.setScore(player.getPlayerName(j), cardScore(j));
                         }
-                        displayBoard();
                         endTrick = true;
                         break;
                     }
@@ -410,6 +433,8 @@ public class Game2 {
                 }
             }
         }
+
+        return false;
     }
  
     public static void main(String[] args) {
@@ -417,7 +442,8 @@ public class Game2 {
         Game2 game = new Game2();
         Boolean endProgram = false;
         Scanner scanner = new Scanner(System.in);
-        String cmd;
+        
+        Application.launch(args);
 
         //Loop for data validation
         while (!endProgram) {
@@ -425,10 +451,14 @@ public class Game2 {
             System.out.println("s - to start the game");
             System.out.println("x - to exit the game");
             
-            cmd = game.userInput(scanner);
+            String cmd = game.userInput(scanner);
             
             if (cmd.equals("s")) {
-                game.play();
+                Boolean endGame = false;
+                
+                while (!endGame) {
+                    endGame = game.play();
+                }
                 endProgram = true;
             }
             else if (cmd.equals("x")) {
@@ -439,5 +469,33 @@ public class Game2 {
                 System.out.println("Invalid Input. Please try again \n");
             }
         }
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("GUI/scenes/Main.fxml")); 
+        Scene scene = new Scene(root, Color.GREEN);
+        Image icon = new Image("GUI/images/icon_1.2.jpg");
+        stage.getIcons().add(icon);
+        stage.setTitle("Go-Boom!! Card Game");
+        
+        stage.setScene(scene); 
+        stage.show();
+        stage.setOnCloseRequest(event -> {
+            event.consume();
+            exit(stage);
+        });
+    }
+
+    public void exit(Stage stage) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Exit");
+        alert.setHeaderText("You're about to exit!");
+        alert.setContentText("Are you sure you want to exit?");
+
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            stage.close();
+        }
+        
     }
 }

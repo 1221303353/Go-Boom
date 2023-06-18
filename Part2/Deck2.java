@@ -110,4 +110,16 @@ public class Deck2 {
     public void setCardInDeck(ArrayList<String> card) {
         this.card = card;
     }
+
+    public void createNewDeck() {
+        this.card.clear();
+        this.wholeDeck.clear();
+
+        for (String suit: suits) {
+            for (String rank: ranks) {
+                this.card.add(suit + rank);
+                this.wholeDeck.add(suit + rank);        
+            }
+        }
+    }
 }
