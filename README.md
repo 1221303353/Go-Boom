@@ -1,32 +1,34 @@
-# Part 1
+# 🃏 Go Boom Game
 
-## A. Member Contributions
+This project is a Java-based object-oriented implementation of the Go Boom card game.
 
-No | ID         | Name                                | Task descriptions | Contribution %
--- | ---------- | -----                               | ----------------- | --------------
-1  | 1221303353 | MUHAMMAD AMIR FARID BIN AHSAN NUDIN | All               | 100%
+The system is divided into:
+- Part 1 – Console-based game implementation
+- Part 2 – Extended features including GUI, save/load functionality, and full round completion
 
+This project emphasizes:
+- Object-Oriented Programming (OOP)
+- Proper class design (inheritance & composition)
+- Use of appropriate data structures (List, Set, Map)
+- GUI development (JavaFX / Swing / etc.)
+- File handling / persistence
 
-## B. Feature Completion
+# Game Rules
+1. 52 cards are randomized.
+2. The first card in the deck becomes the lead card and is placed at the center.
+3. The first lead card determines the first player (Refer Table).
+4. Each of the 4 players receives 7 cards.
 
-Mark Y for complete, N for incomplete.
+| Card Rank | First Player |
+|---|---|
+| A, 5, 9, K | Player 1 |
+| 2, 6, 10 | Player 2 |
+| 3, 7, J | Player 3 |
+| 4, 8, Q | Player 4 |
 
-No | Feature                                                                         | Completed (Y/N)
--- | ------------------------------------------------------------------------------- | ---------------
-1  | All cards should be faced up to facilitate checking.                            |  Y
-2  | Start a new game with randomized 52 cards.                                      |  Y
-3  | The first card in the deck is the first lead card and is placed at the center.  |  Y
-4  | The first lead card determines the first player.                                |  Y
-5  | Deal 7 cards to each of the 4 players.                                          |  Y
-6  | All players must follow the suit or rank of the lead card.                      |  Y
-7  | The highest-rank card with the same suit as the lead card wins the trick.       |  Y
-8  | The winner of a trick leads the next card.                                      |  Y
-
-
-## C. Link to Video Presentation
-
-Upload your video presentation to your Google drive or YouTube, then paste the link below. Give your lab lecturer the permission to view the video.
-
-https://youtu.be/Q8QiU6UCtEk
-
- 
+5. Players must follow suit or rank of the lead card.
+6. The highest rank card of the same suit wins the trick.
+7. The winner of the trick leads the next trick.
+8. If a player cannot follow suit or rank:
+- Must draw from the deck until a playable card is obtained.
+- If deck is empty → player skips.
