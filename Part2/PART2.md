@@ -5,10 +5,6 @@
 No | ID         | Name                                | Task descriptions | Contribution %
 -- | ---------- | ----                                | ----------------- | --------------
 1  | 1221303353 | MUHAMMAD AMIR FARID BIN AHSAN NUDIN | All               | 100%
-2  |            |                                     |                   |
-3  |            |                                     |                   |
-4  |            |                                     |                   |
-
 
 ## B. Part 1 Feature Completion (Latest)
 
@@ -45,13 +41,3 @@ No | Feature                                                                    
    | The GUI can be in JavaFX, Swing, Spring, or Android.                             |
 8  | Keep the console output to facilitate checking.                                  |   P
    | The data in console output and the GUI must tally.                               |
-
-
-## D. Link to Part 2 GitHub Repo
-
-https://github.com/1221303353/Go-Boom
-
-## E. Link to Part 2 Video Presentation
-
-https://youtu.be/AD4CVKoNCVU 
-
